@@ -13,13 +13,11 @@
 		http://www.springframework.org/schema/aop/spring-aop-3.0.xsd 
 		http://www.springframework.org/schema/tx 
 		http://www.springframework.org/schema/tx/spring-tx-3.0.xsd ">
-	<!--需要配置controller,handlerMapping,ViewResolver,intercepter -->
 
-	<!-- 映射处理器之间，相互不影响 -->
-	<!-- 默认的映射处理器 -->
-	<bean
-		class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping">
-	</bean>
+	<!-- mvc的注解驱动 -->
+	<!-- <mvc:annotation-driven /> -->
+	<!-- 一旦有扫描器的定义 mvc:annotation-driven就不需要了，扫描器已经有了注解驱动的功能 -->
+	<context:component-scan base-package="cn.ben.springmvc"></context:component-scan>
 
 
 	<!-- 前缀+viewName+后缀 -->
