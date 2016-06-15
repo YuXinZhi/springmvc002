@@ -21,28 +21,8 @@
 		class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping">
 	</bean>
 
-	<!--3.控制器类名处理器 -->
-	<bean
-		class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping"></bean>
 
-	<!-- 2，简单的url映射处理器 -->
-	<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
-		<property name="mappings">
-			<props>
-				<!-- controller的id -->
-				<prop key="/hello1.do">testController</prop>
-			</props>
-
-		</property>
-	</bean>
-
-
-	<!--1.使用默认的映射处理器来映射controller -->
-	<bean id="testController" name="/hello.do" class="cn.ben.springmvc.TestController">
-
-	</bean>
-
-	<!-- 前缀+viewName -->
+	<!-- 前缀+viewName+后缀 -->
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<!-- webroot到某一指定文件夹的路径 -->
