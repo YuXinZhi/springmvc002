@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd 
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-3.0.xsd 
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop-3.0.xsd 
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx-3.0.xsd ">
+	<!--需要配置controller,handlerMapping,ViewResolver,intercepter -->
+
+	<!-- 映射处理器之间，相互不影响 -->
+	<!-- 默认的映射处理器 -->
+	<bean
+		class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping">
+	</bean>
+
+	<!--3.控制器类名处理器 -->
+	<bean
+		class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping"></bean>
+
+	<!-- 2，简单的url映射处理器 -->
+	<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="mappings">
+			<props>
+				<!-- controller的id -->
+				<prop key="/hello1.do">testController</prop>
+			</props>
+
+		</property>
+	</bean>
+
+
+	<!--1.使用默认的映射处理器来映射controller -->
+	<bean id="testController" name="/hello.do" class="cn.ben.springmvc.TestController">
+
+	</bean>
+
+	<!-- 前缀+viewName -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!-- webroot到某一指定文件夹的路径 -->
+		<property name="prefix" value="/WEB-INF/jsp/"></property>
+		<!-- 视图名称后缀 -->
+		<property name="suffix" value=".jsp"></property>
+
+	</bean>
+</beans>
