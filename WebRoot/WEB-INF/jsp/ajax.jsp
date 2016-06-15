@@ -18,16 +18,31 @@
 <meta http-equiv="expires" content="0">
 <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 <meta http-equiv="description" content="This is my page">
-<!--
-	<link rel="stylesheet" type="text/css" href="styles.css">
-	-->
+<script type="text/javascript" src="js/jquery-3.0.0.js"></script>
+<script type="text/javascript">
+	$(function() {
+		$("#mybutton").click(function() {
+			$.ajax({
+				url : "test/ajax.do",
+				type : "post",
+				dataType : "text",
+				data : {
+					name : "zhangshan"
+				},
+				success : function(requestText) {
+					alert(requestText);
+				},
+				error : function() {
+					alert("error");
+				}
+
+			});
+		});
+	});
+</script>
 </head>
 
 <body>
-	<h1>${p.name }</h1>
-	<h1>${p.age }</h1>
-	<h1>
-		<fmt:formatDate value="${p.birthday }" pattern="yyyy-MM-dd" />
-	</h1>
+	<input id="mybutton" type="button" value="click">
 </body>
 </html>

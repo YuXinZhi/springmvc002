@@ -1,15 +1,22 @@
 package cn.ben.springmvc;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import cn.ben.springmvc.model.Person;
 import cn.ben.springmvc.model.User;
@@ -102,4 +109,85 @@ public class TestController {
 				new SimpleDateFormat("yyyy-MM-dd"), true));
 	}
 
+	/******************************* 返回值 *********************************************/
+
+	/**
+	 * 方法1. 方法的返回值采用ModelAndView,ModelAndView("index", map); 相当于把数据结果放到request里面
+	 * 
+	 * @return
+	 * @throws ParseException
+	 */
+	@RequestMapping("/toPerson001.do")
+	public ModelAndView toPerson001() throws ParseException {
+		Person person = new Person();
+		person.setName("ymm");
+		person.setAge(24);
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = format.parse("1992-05-20");
+		person.setBirthday(date);
+
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("p", person);
+		return new ModelAndView("index", map);
+	}
+
+	/**
+	 * 方法2.直接在方法参数列表中定义Map,这个Map即是ModelAndView里面的Map,
+	 * 有试图解析器统一处理，统一走ModeAndView的接口
+	 * 
+	 * @param map
+	 * @return
+	 * @throws ParseException
+	 */
+	@RequestMapping("/toPerson002.do")
+	public String toPerson002(Map<String, Object> map) throws ParseException {
+		Person person = new Person();
+		person.setName("ymm002");
+		person.setAge(24);
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = format.parse("1992-05-20");
+		person.setBirthday(date);
+
+		map.put("p", person);
+		return "index";
+	}
+
+	/**
+	 * 前两种方法不建议使用
+	 */
+
+	/**
+	 * 在参数列表中直接定义Model,model.addAttribute("p", person);把参数值放到request中去，建议使用
+	 * 
+	 * @param map
+	 * @return
+	 * @throws ParseException
+	 */
+	@RequestMapping("/toPerson003.do")
+	public String toPerson003(Model model) throws ParseException {
+		Person person = new Person();
+		person.setName("ymm003");
+		person.setAge(24);
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = format.parse("1992-05-20");
+		person.setBirthday(date);
+		// 把参数值放到request类中
+		model.addAttribute("p", person);
+		return "index";
+	}
+
+	@RequestMapping("/ajax.do")
+	public void ajax(String name, HttpServletResponse response) {
+		String result = "hello " + name;
+		try {
+			response.getWriter().write(result);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@RequestMapping("/toAjax.do")
+	public String toAjax() {
+		return "ajax";
+	}
 }
