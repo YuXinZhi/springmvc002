@@ -1,6 +1,7 @@
 package cn.ben.springmvc;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -176,6 +177,7 @@ public class TestController {
 		return "index";
 	}
 
+	/************************************* ajax ******************************/
 	@RequestMapping("/ajax.do")
 	public void ajax(String name, HttpServletResponse response) {
 		String result = "hello " + name;
@@ -184,6 +186,12 @@ public class TestController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@RequestMapping("/ajax1.do")
+	public void ajax1(String name, PrintWriter out) {
+		String result = "hello " + name;
+		out.write(result);
 	}
 
 	@RequestMapping("/toAjax.do")
