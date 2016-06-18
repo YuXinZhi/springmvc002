@@ -29,5 +29,7 @@
 	<h1>
 		<fmt:formatDate value="${p.birthday }" pattern="yyyy-MM-dd" />
 	</h1>
+	<h1>${test }</h1>
+	<%-- <%=1/0 %> --%>
 </body>
 </html>

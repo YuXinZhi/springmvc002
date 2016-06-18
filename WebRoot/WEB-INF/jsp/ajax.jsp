@@ -24,7 +24,7 @@
 	$(function() {
 		$("#mybutton").click(function() {
 			$.ajax({
-				url : "test/ajax.do",
+				url : "test/ajax1.do",
 				type : "post",
 				dataType : "text",
 				data : {

@@ -1,12 +1,17 @@
 package cn.ben.springmvc;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,6 +22,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import cn.ben.springmvc.model.Person;
@@ -180,7 +188,7 @@ public class TestController {
 	/************************************* ajax ******************************/
 	@RequestMapping("/ajax.do")
 	public void ajax(String name, HttpServletResponse response) {
-		String result = "hello " + name;
+		String result = "hello ajax" + name;
 		try {
 			response.getWriter().write(result);
 		} catch (IOException e) {
@@ -190,12 +198,85 @@ public class TestController {
 
 	@RequestMapping("/ajax1.do")
 	public void ajax1(String name, PrintWriter out) {
-		String result = "hello " + name;
+		String result = "hello ajax1" + name;
 		out.write(result);
 	}
 
 	@RequestMapping("/toAjax.do")
 	public String toAjax() {
 		return "ajax";
+	}
+
+	/**
+	 * @RequestMapping(value = "/toPerson7.do", method = RequestMethod.POST)
+	 *                       可以指定请求方式，前台页面必须以指定的方式访问
+	 * @param person
+	 * @return
+	 */
+	@RequestMapping(value = "/toPerson7.do", method = RequestMethod.POST)
+	public String toPerson7(Person person) {
+		System.out.println("toPerson5 person=" + person);
+		return "jsp1/index";
+	}
+
+	@RequestMapping("/toForm.do")
+	public String toForm() {
+		return "form";
+	}
+
+	/**************************** 重定向 *********************************/
+	/**
+	 * controller内部重定向:redirect:+同一个controller中的requestMapping的值
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/redirectToForm.do")
+	public String redirectToForm() {
+		return "redirect:toForm.do";
+	}
+
+	/**
+	 * controller之间重定向必须指定controller的命名空间，再指定requestMapping的参数。
+	 * redirect:后必须加/,代表从根目录开始
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/redirectToForm1.do")
+	public String redirectToForm1() {
+		return "redirect:/test1/toForm.do";
+	}
+
+	/****************************** 文件上传 ******************************/
+	@RequestMapping(value = "/upload.do")
+	private String upload(Person person, HttpServletRequest request)
+			throws IOException {
+		// 1.转换request
+		MultipartHttpServletRequest mr = (MultipartHttpServletRequest) request;
+		// 2.获得文件
+		CommonsMultipartFile cfile = (CommonsMultipartFile) mr.getFile("pic");
+		// 3.获得文件字节数组
+		byte[] bfile = cfile.getBytes();
+		String fileName = "";
+		// 获取当前时间的最小精度
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+		fileName = format.format(new Date());
+		Random random = new Random();
+		for (int i = 0; i < 3; i++) {
+			fileName = fileName + random.nextInt(9);
+		}
+		// 获得原始文件
+		String orginalFileName = cfile.getOriginalFilename();
+		// xxx.jpg
+		String suffix = orginalFileName.substring(orginalFileName
+				.lastIndexOf("."));
+		// 拿到项目的部署路径
+		String path = request.getSession().getServletContext().getRealPath("/");
+		// 定义文件的输出流
+		OutputStream out = new FileOutputStream(new File(path + "/upload/"
+				+ fileName + suffix));
+		out.write(bfile);
+		out.flush();
+		out.close();
+		return "success";
 	}
 }

@@ -27,6 +27,20 @@
 		<property name="prefix" value="/WEB-INF/jsp/"></property>
 		<!-- 视图名称后缀 -->
 		<property name="suffix" value=".jsp"></property>
-
 	</bean>
+	<!-- id必须是multipartResolver -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- maxUploadSize单位是byte -->
+		<property name="maxUploadSize" value="1024000"></property>
+	</bean>
+	
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<!-- 拦截范围：拦截某一模块：/myPath/**,拦截所有请求：/** -->
+			<mvc:mapping path="/**"></mvc:mapping>
+			<bean class="cn.ben.springmvc.intercepter.MyIntercepter">
+			</bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
 </beans>
